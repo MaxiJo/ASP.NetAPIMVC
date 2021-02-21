@@ -20,7 +20,7 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            return Ok();
+            return Ok("data has been inputted");
         }
         public IHttpActionResult Delete(int id)
         {
@@ -51,7 +51,7 @@ namespace API.Controllers
             var getAll = itemRepository.Get();
             if(getAll != null)
             {
-                return Ok(itemRepository.Get());
+                return Ok(getAll);
             }
             return NotFound();
         }
@@ -59,14 +59,14 @@ namespace API.Controllers
         //{
         //    return  itemRepository.Get(id);
         //}
-        public IHttpActionResult Get(int id)
+        public Task<IEnumerable<SupplierItem>> Get(int id)
         {
-            var getAll = itemRepository.Get(id);
-            if (getAll != null)
+            var getById = itemRepository.Get(id);
+            if (getById != null)
             {
-                return Ok(itemRepository.Get(id));
+                return getById;
             }
-            return NotFound();
+            return getById;
         }
     }
 }

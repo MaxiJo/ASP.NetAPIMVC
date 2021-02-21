@@ -17,8 +17,19 @@ namespace ASP.NetAPIMVC.Controllers
         // GET: Items
         public ActionResult Index()
         {
-            return View();
+            IEnumerable<SupplierItem> SupplierItems = null;
+            var respondTask = client.GetAsync("Items");
+            respondTask.Wait();
+            var result = respondTask.Result;
+            if (result.IsSuccessStatusCode)
+            {
+                var readTask = result.Content.ReadAsAsync<IList<SupplierItem>>();
+                readTask.Wait();
+                SupplierItems = readTask.Result;
+            }
+            return View(SupplierItems);
         }
+
         public ActionResult Create()
         {
             return View();
@@ -29,66 +40,72 @@ namespace ASP.NetAPIMVC.Controllers
             HttpResponseMessage response = client.PostAsJsonAsync("Items", item).Result;
             return RedirectToAction("Index");
         }
-        public ActionResult Details(int id)
+        public ActionResult Details(int Id)
         {
-            IEnumerable<Item> items= null;
+            IEnumerable<SupplierItem> SupplierItem = null;
+            var responseTask = client.GetAsync("Items/" + Id.ToString());
+            responseTask.Wait();
+
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
+            {
+                var readTask = result.Content.ReadAsAsync<IList<SupplierItem>>();
+                readTask.Wait();
+
+                SupplierItem = readTask.Result;
+            }
+            return View(SupplierItem.FirstOrDefault(i => i.id == Id));
+        }
+        public ActionResult Edit(int id)
+        {
+            IEnumerable<SupplierItem> SupplierItems = null;
+            //HTTP GET
+            var responseTask = client.GetAsync("Items?id=" + id.ToString());
+            responseTask.Wait();
+
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
+            {
+                var readTask = result.Content.ReadAsAsync<IList<SupplierItem>>();
+                readTask.Wait();
+
+                SupplierItems = readTask.Result;
+            }
+            return View(SupplierItems.FirstOrDefault(i => i.id == id));
+        }
+        [HttpPost]
+        public ActionResult Edit(Item item,int id)
+        {
+            SupplierItem sI = new SupplierItem();
+            item.id = id;
+            item.nama = sI.nama;
+            item.price = sI.price;
+            item.quantity = sI.quantity;
+            item.supplierId = sI.supplierId;
+            var putTask = client.PutAsJsonAsync<Item>("Items/" + item.id, item);
+            putTask.Wait();
+            return RedirectToAction("Index");
+        }
+        public ActionResult Delete(int id)
+        {
+            IEnumerable<SupplierItem> items = null;
             var responseTask = client.GetAsync("Items/" + id.ToString());
             responseTask.Wait();
 
             var result = responseTask.Result;
             if (result.IsSuccessStatusCode)
             {
-                var readTask = result.Content.ReadAsAsync<IList<Item>>();
+                var readTask = result.Content.ReadAsAsync<IList<SupplierItem>>();
                 readTask.Wait();
 
                 items = readTask.Result;
             }
-            return View(items.FirstOrDefault(s => s.id == id));
-        }
-        public ActionResult Edit(int id)
-        {
-            IEnumerable<Supplier> suppliers = null;
-            //HTTP GET
-            var responseTask = client.GetAsync("Suppliers?id=" + id.ToString());
-            responseTask.Wait();
-
-            var result = responseTask.Result;
-            if (result.IsSuccessStatusCode)
-            {
-                var readTask = result.Content.ReadAsAsync<IList<Supplier>>();
-                readTask.Wait();
-
-                suppliers = readTask.Result;
-            }
-            return View(suppliers.FirstOrDefault(s => s.id == id));
+            return View(items.FirstOrDefault(i => i.id == id));
         }
         [HttpPost]
-        public ActionResult Edit(Supplier supplier)
+        public ActionResult Delete(Item item, int id)
         {
-            var putTask = client.PutAsJsonAsync<Supplier>("Suppliers/" + supplier.id, supplier);
-            putTask.Wait();
-            return RedirectToAction("Index");
-        }
-        public ActionResult Delete(int id)
-        {
-            IEnumerable<Supplier> suppliers = null;
-            var responseTask = client.GetAsync("Suppliers/" + id.ToString());
-            responseTask.Wait();
-
-            var result = responseTask.Result;
-            if (result.IsSuccessStatusCode)
-            {
-                var readTask = result.Content.ReadAsAsync<IList<Supplier>>();
-                readTask.Wait();
-
-                suppliers = readTask.Result;
-            }
-            return View(suppliers.FirstOrDefault(s => s.id == id));
-        }
-        [HttpPost]
-        public ActionResult Delete(Supplier supplier, int id)
-        {
-            var deleteTask = client.DeleteAsync("Suppliers/" + id);
+            var deleteTask = client.DeleteAsync("Items/" + id);
             deleteTask.Wait();
 
             var result = deleteTask.Result;

@@ -15,26 +15,56 @@ namespace API.Controllers
         SupplierRepository supplierRepository = new SupplierRepository();
         public IHttpActionResult Post(Supplier supplier)
         {
-            supplierRepository.Create(supplier);
-            return Ok();
+            var CreateSupplier = supplierRepository.Create(supplier);
+            if (CreateSupplier == 0)
+            {
+                return NotFound();
+            }
+            return Ok("data has been inputted");
         }
         public IHttpActionResult Delete( int id)
         {
-            supplierRepository.Delete(id);
-            return Ok();
+            var DeleteSupplier = supplierRepository.Delete(id);
+            if (DeleteSupplier == 0)
+            {
+                return NotFound();
+            }
+            return Ok("data has been inputted");
         }
         public IHttpActionResult Put(Supplier supplier, int id)
         {
-            supplierRepository.Update(supplier, id);
-            return Ok();
+            var UpdateSupplier = supplierRepository.Update(supplier,id);
+            if (UpdateSupplier == 0)
+            {
+                return NotFound();
+            }
+            return Ok("data has been inputted");
         }
         
-        public IEnumerable<Supplier> Get()
+        //public IEnumerable<Supplier> Get()
+        //{
+        //    return supplierRepository.Get();
+        //}
+        public IHttpActionResult Get()
         {
-            return supplierRepository.Get();
+            var getAll = supplierRepository.Get();
+            if (getAll != null)
+            {
+                return Ok(supplierRepository.Get());
+            }
+            return NotFound();
         }
-        public Task<IEnumerable<Supplier>> Get( int id)
+        //public Task<IEnumerable<Supplier>> Get( int id)
+        //{
+        //    return supplierRepository.Get(id);
+        //}
+        public Task<IEnumerable<Supplier>> Get(int id)
         {
+            var getById = supplierRepository.Get(id);
+            if (getById != null)
+            {
+                return supplierRepository.Get(id);
+            }
             return supplierRepository.Get(id);
         }
     }

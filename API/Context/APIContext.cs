@@ -14,11 +14,10 @@ namespace API.Context
         public DbSet<Item> Items { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<Item>()
-                .HasRequired<Supplier>(s => s.Suppliers)
+                .HasRequired<Supplier>(d => d.Suppliers)
                 .WithMany(i => i.Items)
-                .HasForeignKey<int>(i => i.supplierId);
+                .HasForeignKey<int>(e => e.supplierId);
         }
     }
 }

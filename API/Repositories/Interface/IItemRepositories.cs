@@ -9,8 +9,8 @@ namespace API.Repositories.Interface
 {
     interface IItemRepositories
     {
-        IEnumerable<Item> Get();
-        Task<IEnumerable<Item>> Get(int id);
+        IEnumerable<SupplierItem> Get();
+        Task<IEnumerable<SupplierItem>> Get(int id);
         int Create(Item item);
         int Update(Item item, int id);
         int Delete( int id);

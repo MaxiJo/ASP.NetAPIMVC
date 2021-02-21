@@ -35,20 +35,19 @@ namespace API.Repositories
             return Delete;
         }
 
-        public IEnumerable<Item> Get()
+        public IEnumerable<SupplierItem> Get()
         {
-            var SP_RetrieveAll = "SP_RetrieveAllSupplier";
-            var GetAll = connection.Query<Item>(SP_RetrieveAll, commandType: CommandType.StoredProcedure);
+            var SP_RetrieveAll = "SP_RetrieveAllItem";
+            var GetAll = connection.Query<SupplierItem>(SP_RetrieveAll, commandType: CommandType.StoredProcedure);
             return GetAll;
         }
 
-        public Task<IEnumerable<Item>> Get(int id)
+        public async Task<IEnumerable<SupplierItem>> Get(int id)
         {
             var SP_RetrieveById = "SP_RetrieveItemById";
             parameters.Add("@Id", id);
-            var GetById = connection.QueryAsync<Item>(SP_RetrieveById, parameters, commandType: CommandType.StoredProcedure);
+            var GetById = await connection.QueryAsync<SupplierItem>(SP_RetrieveById, parameters, commandType: CommandType.StoredProcedure);
             return GetById;
-            
         }
 
         public int Update(Item item, int id)
