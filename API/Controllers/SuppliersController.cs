@@ -54,18 +54,18 @@ namespace API.Controllers
             }
             return NotFound();
         }
-        //public Task<IEnumerable<Supplier>> Get( int id)
-        //{
-        //    return supplierRepository.Get(id);
-        //}
         public Task<IEnumerable<Supplier>> Get(int id)
         {
-            var getById = supplierRepository.Get(id);
-            if (getById != null)
-            {
-                return supplierRepository.Get(id);
-            }
             return supplierRepository.Get(id);
         }
+        //public Task<IEnumerable<Supplier>> Get(int id)
+        //{
+        //    var getById = supplierRepository.Get(id);
+        //    if (getById != null)
+        //    {
+        //        return supplierRepository.Get(id);
+        //    }
+        //    return supplierRepository.Get(id);
+        //}
     }
 }

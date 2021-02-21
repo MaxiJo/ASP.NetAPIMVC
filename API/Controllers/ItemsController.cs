@@ -31,7 +31,7 @@ namespace API.Controllers
             }
             return Ok();
         }
-        public IHttpActionResult Patch(Item item, int id)
+        public IHttpActionResult Put(Item item, int id)
         {
             var UpdateItem = itemRepository.Update(item, id);
             if (UpdateItem == 0)

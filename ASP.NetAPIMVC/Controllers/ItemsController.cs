@@ -78,10 +78,10 @@ namespace ASP.NetAPIMVC.Controllers
         {
             SupplierItem sI = new SupplierItem();
             item.id = id;
-            item.nama = sI.nama;
-            item.price = sI.price;
-            item.quantity = sI.quantity;
-            item.supplierId = sI.supplierId;
+            //sI.nama = item.nama;
+            //sI.price = item.price;
+            //sI.quantity = item.quantity;
+            //sI.supplierId = item.supplierId;
             var putTask = client.PutAsJsonAsync<Item>("Items/" + item.id, item);
             putTask.Wait();
             return RedirectToAction("Index");
